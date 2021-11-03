@@ -14,9 +14,20 @@ const App: FC = () => {
       const newPlayer = {
         name: playerInput.current.value,
       };
-      setPlayers([...players, newPlayer]);
+
+      //prevent duplicate player names
+      if (
+        players.filter((player) => {
+          return player.name === newPlayer.name;
+        }).length < 1
+      ) {
+        setPlayers([...players, newPlayer]);
+      }
       playerInput.current.value = "";
     }
+  };
+  const removePlayer = (name: string) => {
+    setPlayers(players.filter((player) => player.name !== name));
   };
   return (
     <div>
@@ -31,7 +42,11 @@ const App: FC = () => {
       </form>
       <ul className="player-list">
         {players?.map((player) => {
-          return <li>{player.name}</li>;
+          return (
+            <li key={player.name} onClick={() => removePlayer(player.name)}>
+              {player.name}
+            </li>
+          );
         })}
       </ul>
     </div>
